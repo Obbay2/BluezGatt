@@ -79,6 +79,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Base Classes\Service.cs" />
+    <Compile Include="SerialReader.cs" />
     <Compile Include="UnixExitSignal.cs" />
   </ItemGroup>
   <ItemGroup>

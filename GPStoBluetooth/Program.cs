@@ -20,7 +20,7 @@ namespace GPStoBluetooth
             Init.WiringPiSetup();
             int result = Init.WiringPiSetupSys();
             int device = Serial.serialOpen("/dev/ttyS0", 9600);
-            StringBuilder sb = new StringBuilder();
+            StringBuilder dataHolder = new StringBuilder();
 
             DBusConnection connection = new DBusConnection("org.GPSService");
             Application app = new Application(connection.System, "/org/bluez");
@@ -39,61 +39,19 @@ namespace GPStoBluetooth
 
             while (true)
             {
-                int avail = Serial.serialDataAvail(device);
-                if (avail != -1)
+                
+                Tuple<string, string> LatLng = SerialReader.ReadLatLng(dataHolder, device);
+
+                if (LatLng.Item1 != null && LatLng.Item2 != null)
                 {
-                    
-                    char data = (char) Serial.serialGetchar(device);
-
-                    sb.Append(data);
-
-                    if(data == '\n')
-                    {
-                        if(sb.ToString().Contains("$GPGGA"))
-                        {
-                            String[] splitted = sb.ToString().Split(',');
-                            if (!splitted[2].Equals("") && !splitted[4].Equals(""))
-                            {
-                                Console.WriteLine("FIRST TIME");
-                                for (int i = 0; i < splitted.Length; i++ )
-                                {
-                                    Console.WriteLine(splitted[i]);
-                                }
-
-                                splitted[2] = (double.Parse(splitted[2]) / 100).ToString();
-                                splitted[4] = (double.Parse(splitted[4]) / 100).ToString();
-
-                                Console.WriteLine("SECOND TIME");
-                                for (int i = 0; i < splitted.Length; i++)
-                                {
-                                    Console.WriteLine(splitted[i]);
-                                }
-
-                                if (splitted[3].Contains("S"))
-                                {
-                                    splitted[2] = (-double.Parse(splitted[2])).ToString();
-                                }
-                                if (splitted[5].Contains("W"))
-                                {
-                                    splitted[4] = (-double.Parse(splitted[4])).ToString();
-                                }
-
-                                Characteristic latchrc = app.services[0].characteristics[1];
-                                Characteristic lngchrc = app.services[0].characteristics[2];
-                                latchrc.Set(typeof(GattCharacteristic1).DBusInterfaceName(), "Value", splitted[2]);
-                                lngchrc.Set(typeof(GattCharacteristic1).DBusInterfaceName(), "Value", splitted[4]);
-                                Console.WriteLine("Lat: " + splitted[2] + " Long: " + splitted[4]);
-                            }
-                        }
-                        
-                        sb.Clear();
-                    }
+                    Characteristic latchrc = app.services[0].characteristics[1];
+                    Characteristic lngchrc = app.services[0].characteristics[2];
+                    latchrc.Set(typeof(GattCharacteristic1).DBusInterfaceName(), "Value", LatLng.Item1);
+                    lngchrc.Set(typeof(GattCharacteristic1).DBusInterfaceName(), "Value", LatLng.Item2);
+                    Console.WriteLine("Lat: " + LatLng.Item1 + " Long: " + LatLng.Item2);
                 }
-                else
-                {
-                    Console.WriteLine(avail);
-                }
-                Thread.Sleep(20);
+
+                Thread.Sleep(5);
             }
         }
     }
