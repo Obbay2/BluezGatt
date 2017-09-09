@@ -40,13 +40,20 @@ namespace GPStoBluetooth
                             }
                         }
 
-                        //Console.WriteLine(latIndex + "  " + lngIndex + "  " + latIndex.HasValue + " " + lngIndex.HasValue);
+                        Console.WriteLine(latIndex + "  " + lngIndex + "  " + latIndex.HasValue + " " + lngIndex.HasValue);
                         if (latIndex.HasValue && lngIndex.HasValue)
                         {
-                            //Console.WriteLine("Indices at: " + latIndex + " " + lngIndex + " Data at: " + splitData[Math.Abs(latIndex.Value)] + " " + splitData[Math.Abs(lngIndex.Value)]);
+                            Console.WriteLine("Indices at: " + latIndex + " " + lngIndex + " Data at: " + splitData[Math.Abs(latIndex.Value)] + " " + splitData[Math.Abs(lngIndex.Value)]);
 
-                            lat = (Math.Sign(latIndex.Value) * double.Parse(splitData[Math.Abs(latIndex.Value)]) * 10000).ToString();
-                            lng = (Math.Sign(lngIndex.Value) * double.Parse(splitData[Math.Abs(lngIndex.Value)]) * 10000).ToString();
+                            try
+                            {
+                                lat = (Math.Sign(latIndex.Value) * double.Parse(splitData[Math.Abs(latIndex.Value)]) * 10000).ToString();
+                                lng = (Math.Sign(lngIndex.Value) * double.Parse(splitData[Math.Abs(lngIndex.Value)]) * 10000).ToString();
+                            }
+                            catch
+                            {
+                                return new Tuple<string, string>(null, null);
+                            }
                         }
 
 

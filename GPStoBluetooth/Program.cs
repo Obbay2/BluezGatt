@@ -51,7 +51,7 @@ namespace GPStoBluetooth
                     Console.WriteLine("Lat: " + LatLng.Item1 + " Long: " + LatLng.Item2);
                 }
 
-                Thread.Sleep(5);
+                Thread.Sleep(50);
             }
         }
     }
