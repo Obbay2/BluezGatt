@@ -19,8 +19,8 @@ namespace GPStoBluetooth
             systemBus = connection.System;
             this.connection = connection;
 
-            //UnixExitSignal exitClass = new UnixExitSignal();
-            //exitClass.Exit += OnExit;
+            UnixExitSignal exitClass = new UnixExitSignal();
+            exitClass.Exit += OnExit;
         }
 
         public bool IsLowEnergySupported()
