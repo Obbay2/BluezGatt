@@ -33,12 +33,12 @@ namespace GPStoBluetooth
                 Exit?.Invoke(null, EventArgs.Empty);
             });
 
-            Task.Factory.StartNew(() =>
-            {
-                // blocking call to wait for any SIGSEGV signals
-                UnixSignal.WaitAny(memorySignal);
-                DoNothing?.Invoke(null, EventArgs.Empty);
-            });
+            //Task.Factory.StartNew(() =>
+            //{
+            //    // blocking call to wait for any SIGSEGV signals
+            //    UnixSignal.WaitAny(memorySignal);
+            //    DoNothing?.Invoke(null, EventArgs.Empty);
+            //});
         }
 
     }

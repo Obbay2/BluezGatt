@@ -9,6 +9,8 @@ namespace GPStoBluetooth
     class Program
     {
 
+        private static int tries = 5;
+
         static void Main(string[] args)
         {
             Run();
@@ -34,7 +36,17 @@ namespace GPStoBluetooth
             {
                 bluezServices.SetDiscoverable(true);
                 bluezServices.RegisterApplication(app);
-                bluezServices.RegisterAdvertisement(ad);
+
+                while (tries > 0) {
+                    try
+                    {
+                        bluezServices.RegisterAdvertisement(ad);
+                    }
+                    catch
+                    {
+                        tries--;
+                    }
+                }
             }
 
             while (true)

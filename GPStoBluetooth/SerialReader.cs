@@ -23,6 +23,7 @@ namespace GPStoBluetooth
 
                 if (data == '\n')
                 {
+                    //Console.WriteLine(dataHolder);
                     if (dataHolder.ToString().Contains("$GPGGA"))
                     {
                         int? latIndex = null;
@@ -40,6 +41,7 @@ namespace GPStoBluetooth
                             }
                         }
 
+                        
                         Console.WriteLine(latIndex + "  " + lngIndex + "  " + latIndex.HasValue + " " + lngIndex.HasValue);
                         if (latIndex.HasValue && lngIndex.HasValue)
                         {
@@ -47,11 +49,14 @@ namespace GPStoBluetooth
 
                             try
                             {
+                                String.Format("{0:.####}", splitData[Math.Abs(latIndex.Value)]);
+                                String.Format("{0:.####}", splitData[Math.Abs(lngIndex.Value)]);
                                 lat = (Math.Sign(latIndex.Value) * double.Parse(splitData[Math.Abs(latIndex.Value)]) * 10000).ToString();
                                 lng = (Math.Sign(lngIndex.Value) * double.Parse(splitData[Math.Abs(lngIndex.Value)]) * 10000).ToString();
                             }
-                            catch
+                            catch(Exception e)
                             {
+                                Console.WriteLine(e.Message);
                                 return new Tuple<string, string>(null, null);
                             }
                         }
